@@ -33,11 +33,12 @@ def M_x(theta):
 def A(theta):           
     return M_y(theta)*np.cos(theta)-M_x(theta)*np.sin(theta)
 # creamos el archivo con los arrays
-with h5py.File('scripts-dedicados/data', 'w') as f:
+with h5py.File('scripts-dedicados/data.h5', 'w') as f:
     # Creamos el dataset inicial (0 filas, N columnas)
     # maxshape=(None, 10) permite filas infinitas
     dset_theta = f.create_dataset('theta', shape=(0, N), maxshape=(None, N), dtype='float32')
     
+    dset_tiempo= f.create_dataset('tiempo', data=tem, dtype='float32')
 
     dset_p = f.create_dataset('p', shape=(0, N), maxshape=(None, N), dtype='float32')
     
@@ -62,7 +63,6 @@ with h5py.File('scripts-dedicados/data', 'w') as f:
         p=p + dt*A(theta)*0.5
         theta=theta +   p*dt    #0.01=p[1]-p[0] ayudaaaa quitenme la ia, sabe siempre lo que intento hacer 
         p=p + dt*A(theta)*0.5   
-
-
- 
+    f.close()
+ #XCreo que no necesitamos guardar los valores de t sino que informar la cantidad de pasos dados... es mejor dejar un dataset dado ndjsndjs.
 
