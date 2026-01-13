@@ -22,17 +22,27 @@ t=100   # numero de pasos temporales
 dt=0.01   # paso temporal propuesto
 tem=np.arange(0,t,dt)
 
-
+def periodicidad(theta):    #Seguramente es menos confuso no usar thetha.
+    for i in range(len(theta)):
+        
+        if theta[i]<-np.pi:
+            theta[i]=theta[i]+2*np.pi
+        elif theta[i]>np.pi:
+            theta[i]=theta[i]-2*np.pi    #Me da miedo que esto sea terrible para cambios muuuuy grandes que no deberian ocurrir.
+            
+    return theta
 def M_y(theta):
-    M_y=np.mean(np.sin(theta))
-    return M_y
+    seno=np.sin(theta)
+    M_y=np.mean(seno)
+    return M_y, seno
 
 def M_x(theta):
-    M_x=np.mean(np.cos(theta))
-    return M_x
+    coseno=np.cos(theta)
+    M_x=np.mean(coseno)
+    return M_x, coseno
 
-def A(theta):
-    return M_y(theta)*np.cos(theta)-M_x(theta)*np.sin(theta)
+#def A(theta):
+#    return M_y(theta)[0]*M_y(theta)[1]-M_x(theta)[0]*M_x(theta)[1]
 # creamos el archivo con los arrays
 with h5py.File('scripts-dedicados/data.h5', 'w') as f:
     # Creamos el dataset inicial (0 filas, N columnas)
@@ -45,15 +55,19 @@ with h5py.File('scripts-dedicados/data.h5', 'w') as f:
     dset_p = f.create_dataset('p', shape=(N, 0), maxshape=(N, None), dtype='float64')
     dset_p[:,] = p  # Guardamos el estado inicial
     dset_M_y = f.create_dataset('M_y', shape=(1,), maxshape=(None,), dtype='float64')
-    dset_M_y[0,] = M_y(theta)  # Guardamos el estado inicial
+    dset_M_y[0,] = M_y(theta)[0]  # Guardamos el estado inicial
     dset_M_x = f.create_dataset('M_x', shape=(1,), maxshape=(None,), dtype='float64')
-    dset_M_x[0,] = M_x(theta)  # Guardamos el estado inicial
+    dset_M_x[0,] = M_x(theta)[0]      # Guardamos el estado inicial
 
     for i in tem:
         # Guardamos los nuevos datos al final
-        p=p + dt*A(theta)*0.5
-        theta=theta +   p*dt    #0.01=p[1]-p[0] ayudaaaa quitenme la ia, sabe siempre lo que intento hacer 
-        p=p + dt*A(theta)*0.5   
+        M_y_val = M_y(theta)
+        M_x_val = M_x(theta)
+        A=M_y_val[0]*M_y_val[1]-M_x_val[0]*M_x_val[1]
+        p=p + dt*A*0.5
+        theta=theta +   p*dt 
+        theta=periodicidad(theta)   #0.01=p[1]-p[0] ayudaaaa quitenme la ia, sabe siempre lo que intento hacer 
+        p=p + dt*A*0.5   
 
         dset_theta.resize(dset_theta.shape[1]+1, axis=1)
         dset_theta[:,-1] = theta
@@ -62,10 +76,9 @@ with h5py.File('scripts-dedicados/data.h5', 'w') as f:
         dset_p[:,-1] = p
         
         dset_M_y.resize(dset_M_x.shape[0]+1, axis=0)
-        dset_M_y[-1] = M_y(theta)
-
+        dset_M_y[-1] = M_y_val[0]
         dset_M_x.resize(dset_M_x.shape[0]+1, axis=0)
-        dset_M_x[-1] = M_x(theta)
+        dset_M_x[-1] = M_x_val[0]
     plt.hist2d(theta, p, bins=120, range=[[-np.pi,np.pi], [-2, 2]], cmap='plasma', cmin=1)  #Usemos cmin=1 para evitar problemas con bins vacíos    
     plt.xlabel('Theta') 
     plt.ylabel('p') 
