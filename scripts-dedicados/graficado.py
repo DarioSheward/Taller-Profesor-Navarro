@@ -1,11 +1,10 @@
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
-
+from matplotlib.animation import FuncAnimation
 with h5py.File('./scripts-dedicados/data.h5', 'r') as f:
     # Acceder a variables específicas
     t=f['tiempo'][:]
-    print(f['p'].shape)
 
     for i in range(t.shape[0]): # Queda buscar como poner el ... resuelto
         theta = f['theta'][:,i]
@@ -15,5 +14,6 @@ with h5py.File('./scripts-dedicados/data.h5', 'r') as f:
     plt.ylabel('p') 
     plt.title('Phase Space Evolution at step {}'.format(i))
     plt.colorbar(label='Density')   
+    #plt.savefig(f'scripts-dedicados/graficos/phase_space_step_{i}.png')
     plt.show()
 #Recordar que los graficos iran dentro del loop
