@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import h5py
 N=1000 #numero de particulas
 
-#metodo randomizado respecto a una referencia.
-theta= np.random.triangular(left=-np.pi, mode=0, right=np.pi, size=N)
+
+theta= np.random.uniform(-np.pi,np.pi,N)   #inicializamos las particulas en theta y p
 
 #p= np.random.default_rng(-1,1,N)
 
@@ -79,12 +79,5 @@ with h5py.File('scripts-dedicados/data.h5', 'w') as f:
         dset_M_y[-1] = M_y_val[0]
         dset_M_x.resize(dset_M_x.shape[0]+1, axis=0)
         dset_M_x[-1] = M_x_val[0]
-    plt.hist2d(theta, p, bins=120, range=[[-np.pi,np.pi], [-2, 2]], cmap='plasma', cmin=1)  #Usemos cmin=1 para evitar problemas con bins vacíos    
-    plt.xlabel('Theta') 
-    plt.ylabel('p') 
-    #plt.title('Phase Space Evolution at step {}'.format(i))
-    plt.colorbar(label='Density')   
-    plt.show()
-    f.close()
  #XCreo que no necesitamos guardar los valores de t sino que informar la cantidad de pasos dados... es mejor dejar un dataset dado ndjsndjs.
 

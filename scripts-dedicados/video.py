@@ -27,4 +27,4 @@ with h5py.File('./scripts-dedicados/data.h5', 'r') as f:
 
     cbar = plt.colorbar(mappable, ax=ax, label='Density')
 
-    ani.save('./scripts-dedicados/graficos/video0.mp4', writer='ffmpeg', fps=30, dpi=60, extra_args=['-vcodec', 'libx264', '-pix_fmt', 'yuv420p'])
+    ani.save('./scripts-dedicados/graficos/video1.mp4', writer='ffmpeg', fps=30, dpi=80)
