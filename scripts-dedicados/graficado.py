@@ -2,7 +2,7 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-with h5py.File('./scripts-dedicados/data.h5', 'r') as f:
+with h5py.File('./scripts-dedicados/data2.h5', 'r') as f:
     # Acceder a variables específicas
     t=f['tiempo'][:]
     respuesta=input("¿Generar gráficos de Magnetizacion o Espacio de Fase (m/f): ")
@@ -18,7 +18,7 @@ with h5py.File('./scripts-dedicados/data.h5', 'r') as f:
         plt.ylabel('Magnetización')
         plt.title('Evolución de la Magnetización en el Tiempo')
         plt.legend()
-        plt.savefig('scripts-dedicados/graficos/magnetizacion.png')
+        plt.savefig('scripts-dedicados/graficos/2magnetizacion.png')
     elif respuesta.lower()=='f':
         for i in range(0,t.shape[0],100): # Queda buscar como poner el ... resuelto
             theta = f['theta'][:,i]
@@ -28,6 +28,6 @@ with h5py.File('./scripts-dedicados/data.h5', 'r') as f:
             plt.ylabel('p') 
             plt.title('Phase Space Evolution at step {}'.format(i))
             plt.colorbar(label='Density')   
-            plt.savefig(f'scripts-dedicados/graficos/phase_space_step_{i}.png')
+            plt.savefig(f'scripts-dedicados/graficos/2phase_space_step_{i}.png')
             plt.clf()
 #Recordar que los graficos iran dentro del loop
