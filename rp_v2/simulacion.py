@@ -17,7 +17,6 @@ t=100   # numero de pasos temporales
 dt=0.01   # paso temporal propuesto
 atem= np.arange(0,t,dt)
 tem=len(atem)
-print(tem)
 
 
 def periodicidad(dset):
@@ -44,10 +43,12 @@ def Mag(theta):
     Mag=np.hypot(M_x,M_y)
     return Mag, M_x, M_y, M_y*seno-M_x*coseno
 
+print("Iniciando simulación y guardando datos en rp_v2/output/data_casoprueba.h5...")
+
 with h5py.File('rp_v2/output/data_casoprueba.h5', 'w') as f:
     # Creamos el dataset inicial (0 filas, N columnas)
     # maxshape=(None, 10) permite filas infinitas
-
+    print("Creando datasets...")
     dset_theta = f.create_dataset('theta', shape=(N, tem), dtype='float64')
     dset_theta[:,0] = theta  # Guardamos el estado inicial
     
@@ -63,10 +64,10 @@ with h5py.File('rp_v2/output/data_casoprueba.h5', 'w') as f:
     dset_M_x = f.create_dataset('M_x', shape=(tem,), dtype='float64')
     dset_M_x[0,] = Mag_val[1]      # Guardamos el estado inicial
     dset_Mag = f.create_dataset('Mag', shape=(tem,), dtype='float64')
+    dset_Mag[0,] = Mag_val[0]  # Guardamos el estado inicial
+    print("Comenzando la evolución temporal...")
     
-    
-    
-    for i in range(tem):
+    for i in range(tem-1):
         
         # Guardamos los nuevos datos al final
         p=p + dt*Mag_val[3]*0.5
@@ -76,12 +77,12 @@ with h5py.File('rp_v2/output/data_casoprueba.h5', 'w') as f:
 
         #dset_theta[:,i] = theta
         dset_p[:,i] = p
-        dset_Mag[i+1,] = Mag_val[0]
-        dset_M_y[i+1,] = Mag_val[2]
-        dset_M_x[i+1,] = Mag_val[1]
+        dset_Mag[i,] = Mag_val[0]
+        dset_M_y[i,] = Mag_val[2]
+        dset_M_x[i,] = Mag_val[1]
 
         
-        #theta=periodicidad(theta)
-        dset_theta[:,i+1]= theta
+        theta=periodicidad(theta)
+        dset_theta[:,i] = theta
  #XCreo que no necesitamos guardar los valores de t sino que informar la cantidad de pasos dados... es mejor dejar un dataset dado ndjsndjs.
 
