@@ -62,7 +62,7 @@ def Mag(theta):
 #def A(theta):
 #    return M_y(theta)[0]*M_y(theta)[1]-M_x(theta)[0]*M_x(theta)[1]
 # creamos el archivo con los arrays
-with h5py.File('scripts-dedicados/data2.h5', 'w') as f:
+with h5py.File('scripts-dedicados/data3.h5', 'w') as f:
     # Creamos el dataset inicial (0 filas, N columnas)
     # maxshape=(None, 10) permite filas infinitas
 
