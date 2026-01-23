@@ -5,10 +5,19 @@ import h5py
 import imageio_ffmpeg
 from tqdm import tqdm  # Importamos tqdm
 
+def periodicidad(dset):
+    data = dset[:]
+    
+    data = (data + np.pi) % (2 * np.pi) - np.pi
+    
+    dset[:] = data
+    
+    return dset
+
 ruta_ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
 plt.rcParams['animation.ffmpeg_path'] = ruta_ffmpeg
 
-with h5py.File('rp_v2/output/data_casoprueba.h5', 'r') as f:
+with h5py.File('rp_v2/output/data_casoprueba_opt.h5', 'r') as f:
     t = f['tiempo'][:]
     n_frames = t.shape[0]
     frames_to_process = int(n_frames*0.1) # Definimos la cantidad exacta
@@ -23,7 +32,7 @@ with h5py.File('rp_v2/output/data_casoprueba.h5', 'r') as f:
     
     # Creamos la gráfica base
     counts, xedges, yedges, quadmesh = ax.hist2d(
-        theta0, p0, bins=bins, range=range_lims, cmap='plasma', cmin=1, vmin=1, vmax=100
+        theta0, p0, bins=bins, range=range_lims, cmap='plasma', cmin=1, vmin=1, vmax=20
     )
 
     ax.set_xlabel('Theta')
@@ -34,7 +43,7 @@ with h5py.File('rp_v2/output/data_casoprueba.h5', 'r') as f:
     # --- FUNCIÓN UPDATE ---
     def update(frame):
         # Leemos datos
-        theta = f['theta'][:, frame]
+        theta = periodicidad(f['theta'][:, frame])
         p = f['p'][:, frame]
         
         # Calculamos histograma rápido con NumPy

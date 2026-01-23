@@ -82,7 +82,7 @@ with h5py.File('rp_v2/output/data_casoprueba.h5', 'w') as f:
         dset_M_x[i,] = Mag_val[1]
 
         
-        theta=periodicidad(theta)
+        #theta=periodicidad(theta)
         dset_theta[:,i] = theta
  #XCreo que no necesitamos guardar los valores de t sino que informar la cantidad de pasos dados... es mejor dejar un dataset dado ndjsndjs.
 
