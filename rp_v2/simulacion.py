@@ -18,23 +18,6 @@ dt=0.01   # paso temporal propuesto
 atem= np.arange(0,t,dt)
 tem=len(atem)
 
-
-def periodicidad(dset):
-    """
-    Aplica condiciones periódicas de frontera directamente sobre un dataset h5py.
-    Lee los datos, normaliza a [-pi, pi) y guarda los cambios en el disco.
-    """
-    # 1. Leemos todo el contenido del dataset a la memoria RAM
-    #    El uso de [:] fuerza la carga de los datos.
-    data = dset[:]
-    # 2. Aplicamos la corrección matemática vectorizada
-    data = (data + np.pi) % (2 * np.pi) - np.pi
-    # 3. Escribimos los datos corregidos de vuelta al dataset en el disco
-    #    Es CRUCIAL usar [:] a la izquierda para asignar dentro del archivo
-    dset[:] = data
-    # Retornamos el dataset por si quieres encadenar operaciones, 
-    # aunque ya fue modificado en disco.
-    return dset
 def Mag(theta):
     seno=np.sin(theta)
     coseno=np.cos(theta)

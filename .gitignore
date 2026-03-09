@@ -5,3 +5,8 @@ test.py
 *.mp4
 /scripts-dedicados/graficos/.
 *.h5
+*.aux
+*.dvi
+*.log
+*.pdf
+*.gz

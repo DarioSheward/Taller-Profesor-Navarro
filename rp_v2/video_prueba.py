@@ -17,10 +17,10 @@ def periodicidad(dset):
 ruta_ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
 plt.rcParams['animation.ffmpeg_path'] = ruta_ffmpeg
 
-with h5py.File('rp_v2/output/data_casoprueba_opt.h5', 'r') as f:
+with h5py.File('rp_v2/output/data_casoprueba.h5', 'r') as f:
     t = f['tiempo'][:]
     n_frames = t.shape[0]
-    frames_to_process = int(n_frames*0.1) # Definimos la cantidad exacta
+    frames_to_process = int(n_frames) # Definimos la cantidad exacta
 
     fig, ax = plt.subplots(figsize=(8, 6))
 
@@ -32,7 +32,7 @@ with h5py.File('rp_v2/output/data_casoprueba_opt.h5', 'r') as f:
     
     # Creamos la gráfica base
     counts, xedges, yedges, quadmesh = ax.hist2d(
-        theta0, p0, bins=bins, range=range_lims, cmap='plasma', cmin=1, vmin=1, vmax=20
+        theta0, p0, bins=bins, range=range_lims, cmap='plasma', cmin=1, vmin=1, vmax=15
     )
 
     ax.set_xlabel('Theta')
@@ -48,8 +48,8 @@ with h5py.File('rp_v2/output/data_casoprueba_opt.h5', 'r') as f:
         
         # Calculamos histograma rápido con NumPy
         H, _, _ = np.histogram2d(theta, p, bins=bins, range=range_lims)
-        H = H.T
-        H[H < 1] = np.nan
+        #H = H.T
+        #H[H < 1] = np.nan
         
         # Actualizamos la malla existente
         quadmesh.set_array(H.ravel())

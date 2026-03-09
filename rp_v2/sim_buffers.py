@@ -7,7 +7,7 @@ from tqdm import tqdm # Usamos tqdm para una barra de carga real
 N = 1000 
 theta0 = 0.78
 p0 = 1.39
-t_total = 100     
+t_total = 650     
 dt = 0.01
 
 # Definición temporal
